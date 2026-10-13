@@ -22,3 +22,6 @@ jobs:
         
       - name: Build the Docker image
         run: docker build -t "$IMAGE:$TAG" .
+
+      - name: Run container
+        run: docker run -d --name liatrio-api -p 3000:3000 "$IMAGE:$TAG"
