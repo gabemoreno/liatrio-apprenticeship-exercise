@@ -22,3 +22,9 @@ jobs:
         
       - name: Build the Docker image
         run: docker build -t "$IMAGE:$TAG" .
+
+      - name: Run container
+        run: docker run -d --name liatrio-api -p 80:3000 "$IMAGE:$TAG"
+      
+      - name: run tests
+        uses: liatrio/github-actions/apprentice-action@0b41561cca6822cc8d880fe0e49e7807a41fdf91
