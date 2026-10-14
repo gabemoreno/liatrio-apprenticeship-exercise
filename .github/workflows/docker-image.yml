@@ -2,7 +2,7 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "feature/docker-hub-publish" ]
   pull_request:
     branches: [ "main" ]
 
@@ -28,3 +28,10 @@ jobs:
       
       - name: run tests
         uses: liatrio/github-actions/apprentice-action@0b41561cca6822cc8d880fe0e49e7807a41fdf91
+
+      - name: Log in to Docker Hub
+        if: github.ref == 'refs/heads/feature/docker-hub-publish'
+        uses: docker/login-action@v4
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
