@@ -35,3 +35,7 @@ jobs:
         with:
           username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Push Docker image
+        if: github.ref == 'refs/heads/feature/docker-hub-publish'
+        run: docker push "$IMAGE:$TAG"
