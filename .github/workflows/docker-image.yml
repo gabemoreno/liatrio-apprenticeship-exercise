@@ -12,6 +12,10 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: read
+      id-token: write
+
     env:
       IMAGE: gabepmoreno/liatrio-api
       TAG: ${{ github.run_number }}-${{ github.run_attempt }}
@@ -39,3 +43,20 @@ jobs:
       - name: Push Docker image
         if: github.ref == 'refs/heads/main'
         run: docker push "$IMAGE:$TAG"
+
+      - name: Authenticate to Google Cloud
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093
+        with:
+          project_id: apprentice-exercise-liatrio
+          workload_identity_provider: projects/768170358154/locations/global/workloadIdentityPools/github-actions/providers/github
+          service_account: github-actions-deployer@apprentice-exercise-liatrio.iam.gserviceaccount.com
+
+      - name: Deploy to Cloud Run
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: google-github-actions/deploy-cloudrun@2028e2d7d30a78c6910e0632e48dd561b064884d
+        with:
+          project_id: apprentice-exercise-liatrio
+          service: liatrio-api
+          region: us-west1
+          image: docker.io/${{ env.IMAGE }}:${{ env.TAG }}
