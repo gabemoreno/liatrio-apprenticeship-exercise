@@ -60,3 +60,4 @@ jobs:
           service: liatrio-api
           region: us-west1
           image: docker.io/${{ env.IMAGE }}:${{ env.TAG }}
+          flags: '--port=3000'
