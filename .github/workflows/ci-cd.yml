@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: API CI/CD Pipeline
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
 
 jobs:
 
-  build:
+  pipeline:
 
     runs-on: ubuntu-latest
 
@@ -18,7 +18,7 @@ jobs:
 
     env:
       IMAGE: gabepmoreno/liatrio-api
-      TAG: ${{ github.run_number }}-${{ github.run_attempt }}
+      TAG: v-${{ github.run_number }}-${{ github.run_attempt }}
 
     steps:
       - name: Checkout Repository
